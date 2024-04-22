@@ -1,0 +1,7 @@
+/.pio
+/.vscode
+
+/**/CMakeLists.txt
+
+/sdkconfig.*
+!/sdkconfig.defaults
