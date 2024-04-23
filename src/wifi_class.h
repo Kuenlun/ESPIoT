@@ -25,9 +25,6 @@ namespace ESPIoT
 
     private:
         static constexpr uint8_t EXAMPLE_ESP_MAXIMUM_RETRY{5};
-
-    private:
-        wifi_config_t m_wifi_config{};
     };
 
 } // namespace ESPIoT

@@ -98,10 +98,31 @@ namespace ESPIoT
         s_wifi_event_group = xEventGroupCreate();
         wifi_init_sta();
 
-        strcpy((char *)m_wifi_config.sta.ssid, ssid);
-        strcpy((char *)m_wifi_config.sta.password, pass);
+        wifi_config_t config{};
+        // Check SSID limit length
+        if (strnlen(ssid, sizeof(config.sta.ssid)) < sizeof(config.sta.ssid))
+        {
+            strncpy(reinterpret_cast<char *>(config.sta.ssid), ssid, sizeof(config.sta.ssid) - 1);
+        }
+        else
+        {
+            ESP_LOGE(LOG_TAG, "SSID '%s' is longer than %u characters",
+                     ssid, sizeof(config.sta.ssid) - 1);
+            assert(false);
+        }
+        // Check PASS limit length
+        if (strnlen(pass, sizeof(config.sta.password)) < sizeof(config.sta.password))
+        {
+            strncpy(reinterpret_cast<char *>(config.sta.password), pass, sizeof(config.sta.password) - 1);
+        }
+        else
+        {
+            ESP_LOGE(LOG_TAG, "PASS '%s' is longer than %u characters",
+                     pass, sizeof(config.sta.password) - 1);
+            assert(false);
+        }
 
-        ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_STA, &m_wifi_config));
+        ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_STA, &config));
         ESP_ERROR_CHECK(esp_wifi_start());
 
         /* Waiting until either the connection is established (WIFI_CONNECTED_BIT) or connection failed for the maximum
