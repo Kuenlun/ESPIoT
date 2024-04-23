@@ -5,3 +5,5 @@
 
 /sdkconfig.*
 !/sdkconfig.defaults
+
+/include/secrets.h
